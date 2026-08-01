@@ -1,5 +1,5 @@
 import type { RideReq } from "../../../shared/types";
-import { rideReqUrl } from "./urls";
+import { batchUrl, rideReqUrl } from "./urls";
 
 export async function getAllRideReq() {
   try {
@@ -22,6 +22,24 @@ export async function addRideReq(rideReq: RideReq) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(rideReq),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("POST ride req failed", error);
+  }
+}
+
+export async function addBatchRideReq(rideReqs: RideReq[]) {
+  try {
+    const response = await fetch(batchUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(rideReqs),
     });
 
     if (!response.ok) {

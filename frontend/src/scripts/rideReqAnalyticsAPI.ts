@@ -6,9 +6,14 @@ import {
   timestampsUrl,
   startLocUrl,
   endLocUrl,
+  totalUsersUrl,
+  totalRidersUrl,
+  avgRidersUrl,
+  totalReqsUrl,
+  mapPointsUrl,
 } from "./urls";
 
-async function getRiderTraffic(url: string) {
+async function get(url: string, errorMssg: string) {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -17,54 +22,42 @@ async function getRiderTraffic(url: string) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("GET rider traffic failed", error);
+    console.error(errorMssg, error);
   }
+}
+export async function getMapPoints() {
+  return await get(mapPointsUrl, "GET map points failed");
+}
+export async function getTotalUsers() {
+  return await get(totalUsersUrl, "GET total users failed");
+}
+export async function getTotalRiders() {
+  return await get(totalRidersUrl, "GET total riders failed");
+}
+export async function getAvgRiders() {
+  return await get(avgRidersUrl, "GET average riders failed");
+}
+export async function getTotalReqs() {
+  return await get(totalReqsUrl, "GET total requests failed");
 }
 export async function getRiderTrafficHourly() {
-  return await getRiderTraffic(riderTrafficHourlyUrl);
+  return await get(riderTrafficHourlyUrl, "GET rider traffic hourly failed");
 }
 export async function getRiderTrafficDaily() {
-  return await getRiderTraffic(riderTrafficDailyUrl);
+  return await get(riderTrafficDailyUrl, "GET rider traffic daily failed");
 }
 export async function getRiderTrafficMonthly() {
-  return await getRiderTraffic(riderTrafficMonthlyUrl);
+  return await get(riderTrafficMonthlyUrl, "GET rider traffic monthly failed");
 }
 export async function getRiderTrafficYearly() {
-  return await getRiderTraffic(riderTrafficYearlyUrl);
+  return await get(riderTrafficYearlyUrl, "GET rider traffic yearly failed");
 }
 export async function getTimestamps() {
-  try {
-    const response = await fetch(timestampsUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("GET timestamps failed", error);
-  }
+  return await get(timestampsUrl, "GET timestamps failed");
 }
 export async function getStartLocations() {
-  try {
-    const response = await fetch(startLocUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("GET start locations failed", error);
-  }
+  return await get(startLocUrl, "GET start locations failed");
 }
 export async function getEndLocations() {
-  try {
-    const response = await fetch(endLocUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("GET end locations failed", error);
-  }
+  return await get(endLocUrl, "GET end locations failed");
 }

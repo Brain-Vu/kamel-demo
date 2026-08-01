@@ -1,8 +1,29 @@
 import { RideReqStore } from "../store/rideReqStore";
-import { TrafficData } from "../../../shared/types";
+import { RideReq, TrafficData } from "../../../shared/types";
 
 export class RideReqAnalyticsService {
   constructor(private store: RideReqStore) {}
+
+  getTotalRiders() {
+    const rideReqs = this.store.getAll();
+
+    return rideReqs.reduce(
+      (total, rideReq: RideReq) => total + rideReq.rider_count,
+      0,
+    );
+  }
+
+  getTotalRideRequests() {
+    return this.store.getAll().length;
+  }
+
+  getTotalUsers() {
+    return new Set(this.store.getAll().map((obj) => obj.user_id)).size;
+  }
+
+  getAverageRiders() {
+    return this.getTotalRiders() / this.getTotalRideRequests();
+  }
 
   getRiderTrafficHourly(): TrafficData[] {
     const traffic: TrafficData[] = Array.from({ length: 24 }, (_, i) => ({
@@ -95,9 +116,11 @@ export class RideReqAnalyticsService {
   getTimes() {
     return this.store.getAll().map((rideReq) => rideReq.timestamp);
   }
+
   getStartLocs() {
     return this.store.getAll().map((rideReq) => rideReq.start_coord);
   }
+
   getEndLocs() {
     return this.store.getAll().map((rideReq) => rideReq.end_coord);
   }

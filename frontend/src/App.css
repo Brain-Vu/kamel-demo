@@ -10,6 +10,10 @@ body {
 
 .content {
   padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-top: 40px;
 }
 
 .stat-card {
@@ -26,4 +30,11 @@ body {
   margin-top: 32px;
   padding: 24px;
   border-radius: 14px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 100%;
 }

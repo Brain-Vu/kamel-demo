@@ -1,33 +1,26 @@
-import { useEffect, useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-} from "@mui/material";
-import RefreshIcon from "@mui/icons-material/Refresh";
+import { useState } from "react";
+import { Box } from "@mui/material";
 import {
   getRiderTrafficHourly,
   getRiderTrafficDaily,
   getRiderTrafficMonthly,
   getRiderTrafficYearly,
+  getTotalUsers,
+  getTotalRiders,
+  getAvgRiders,
+  getTotalReqs,
+  getMapPoints,
 } from "./scripts/rideReqAnalyticsAPI";
 import { getAllRideReq } from "./scripts/rideReqAPI";
-import {
-  getStartLocations,
-  getEndLocations,
-} from "./scripts/rideReqAnalyticsAPI";
 import TripsMap from "./components/TripsMap";
+import StatCards from "./components/StatCards";
 import GraphGrid from "./components/GraphGrid";
+import HeaderBar from "./components/HeaderBar";
 import RecentList from "./components/RecentList";
 import type { TrafficData, RideReq, Coord } from "../../shared/types";
 import "./App.css";
 
-import { testFunc } from "./scripts/test"; // remove me
+import { generateData } from "../../testing/test";
 
 function App() {
   const [riderTrafficHourly, setRiderTrafficHourly] = useState<TrafficData[]>(
@@ -44,110 +37,65 @@ function App() {
   const [startCoords, setStartLocations] = useState<Coord[]>([]);
   const [endCoords, setEndLocations] = useState<Coord[]>([]);
 
-  useEffect(() => {
-    testFunc();
-    async function loadContent() {
-      // loading content for graph grid
-      const _riderTrafficHourly = await getRiderTrafficHourly();
-      const _riderTrafficDaily = await getRiderTrafficDaily();
-      const _riderTrafficMonthly = await getRiderTrafficMonthly();
-      const _riderTrafficYearly = await getRiderTrafficYearly();
-      setRiderTrafficHourly(_riderTrafficHourly);
-      setRiderTrafficDaily(_riderTrafficDaily);
-      setRiderTrafficMonthly(_riderTrafficMonthly);
-      setRiderTrafficYearly(_riderTrafficYearly);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalRiders, setTotalRiders] = useState(0);
+  const [avgRiders, setAvgRiders] = useState(0);
+  const [totalReqs, setTotalReqs] = useState(0);
 
-      // loading content for recency list
-      const _rideReqs = await getAllRideReq();
-      setRideReqs(_rideReqs);
+  async function loadContent() {
+    // generating data
+    await generateData();
 
-      // loading content for trips map
-      const _startLocations = await getStartLocations();
-      const _endLocations = await getEndLocations();
-      setStartLocations(_startLocations);
-      setEndLocations(_endLocations);
-    }
-    loadContent();
-  }, []);
+    // loading content for statistics
+    const _totalUsers = await getTotalUsers();
+    const _totalRiders = await getTotalRiders();
+    const _avgRiders = await getAvgRiders();
+    const _totalReqs = await getTotalReqs();
+    setTotalUsers(_totalUsers);
+    setTotalRiders(_totalRiders);
+    setAvgRiders(_avgRiders);
+    setTotalReqs(_totalReqs);
 
-  const handleRefresh = () => {
-    console.log("Refresh");
-  };
+    // loading content for graph grid
+    const _riderTrafficHourly = await getRiderTrafficHourly();
+    const _riderTrafficDaily = await getRiderTrafficDaily();
+    const _riderTrafficMonthly = await getRiderTrafficMonthly();
+    const _riderTrafficYearly = await getRiderTrafficYearly();
+    setRiderTrafficHourly(_riderTrafficHourly);
+    setRiderTrafficDaily(_riderTrafficDaily);
+    setRiderTrafficMonthly(_riderTrafficMonthly);
+    setRiderTrafficYearly(_riderTrafficYearly);
 
-  const stats = [
-    {
-      title: "Total People Needing a Ride",
-      value: "143",
-    },
-    {
-      title: "Ride Requests",
-      value: "71",
-    },
-    {
-      title: "Completed Trips",
-      value: "58",
-    },
-    {
-      title: "Active Users",
-      value: "36",
-    },
-  ];
+    // loading content for trips map
+    // const _startLocations = await getStartLocations();
+    // const _endLocations = await getEndLocations();
+    const { startCoords, endCoords } = await getMapPoints();
+    setStartLocations(startCoords);
+    setEndLocations(endCoords);
+
+    // loading content for recency list
+    const _rideReqs = await getAllRideReq();
+    setRideReqs(_rideReqs);
+  }
 
   return (
     <Box className="app">
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Kamel Ride Dashboard
-          </Typography>
-
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<RefreshIcon />}
-            onClick={handleRefresh}
-          >
-            Refresh
-          </Button>
-        </Toolbar>
-      </AppBar>
-
+      <HeaderBar handleLoadButton={loadContent}></HeaderBar>
       <Box className="content">
-        <Typography variant="h4" gutterBottom>
-          Analytics Overview
-        </Typography>
-
-        <Grid container spacing={3}>
-          {stats.map((stat) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={stat.title}>
-              <Card className="stat-card">
-                <CardContent>
-                  <Typography color="text.secondary">{stat.title}</Typography>
-
-                  <Typography variant="h3">{stat.value}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "40px",
-            paddingTop: "40px",
-          }}
-        >
-          <RecentList rideReqs={rideReqs} />
-          <GraphGrid
-            riderTrafficHourly={riderTrafficHourly}
-            riderTrafficDaily={riderTrafficDaily}
-            riderTrafficMonthly={riderTrafficMonthly}
-            riderTrafficYearly={riderTrafficYearly}
-          />
-          <TripsMap startCoords={startCoords} endCoords={endCoords} />
-        </div>
+        <StatCards
+          totalUsers={totalUsers}
+          totalRiders={totalRiders}
+          avgRiders={avgRiders}
+          totalReqs={totalReqs}
+        ></StatCards>
+        <RecentList rideReqs={rideReqs} />
+        <GraphGrid
+          riderTrafficHourly={riderTrafficHourly}
+          riderTrafficDaily={riderTrafficDaily}
+          riderTrafficMonthly={riderTrafficMonthly}
+          riderTrafficYearly={riderTrafficYearly}
+        />
+        <TripsMap startCoords={startCoords} endCoords={endCoords} />
       </Box>
     </Box>
   );
