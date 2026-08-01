@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  background: #f4f6f9;
+  font-family: Roboto, sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.content {
+  padding: 32px;
+}
+
+.stat-card {
+  border-radius: 14px;
+  transition: 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.table-paper {
+  margin-top: 32px;
+  padding: 24px;
+  border-radius: 14px;
+}

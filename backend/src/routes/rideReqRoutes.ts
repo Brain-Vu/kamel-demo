@@ -1,0 +1,21 @@
+import { Router } from "express";
+import { RideReq } from "../models/RideReq";
+import { rideReqService } from "../dependencies";
+
+const router = Router();
+
+/* POST new ride requests */
+router.post("/", (req, res) => {
+  const rideReq: RideReq = req.body;
+  rideReqService.addRideReq(rideReq);
+  res.status(201).json({ message: "POST ride request" });
+});
+
+/* GET all ride requests*/
+router.get("/", (req, res) => {
+  console.log("here")
+  const rideReqs = rideReqService.getRideReqs();
+  res.json(rideReqs);
+});
+
+export default router;
