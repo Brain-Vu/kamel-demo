@@ -1,4 +1,4 @@
-import { RideReq } from "../../../types";
+import { RideReq } from "../../../shared/types";
 
 export class RideReqStore {
   private rideRequests: RideReq[] = [];

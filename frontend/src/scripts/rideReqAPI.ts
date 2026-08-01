@@ -1,4 +1,4 @@
-import type { RideReq } from "../../../types";
+import type { RideReq } from "../../../shared/types";
 import { rideReqUrl } from "./urls";
 
 export async function getAllRideReq() {

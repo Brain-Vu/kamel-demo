@@ -1,4 +1,5 @@
-import type { RideReq } from "../../../types";
+import type { RideReq } from "../../../shared/types";
+import { addRideReq } from "./rideReqAPI";
 
 const payload : RideReq = {
   user_id: 52402,
@@ -11,7 +12,7 @@ const payload : RideReq = {
   },
   end_coord: {
     latitude: 42.4439,
-    longitude: 76.5019,
+    longitude: -76.5019,
   },
 };
-// addRideReq(payload);
+export const testFunc = () => {addRideReq(payload)};

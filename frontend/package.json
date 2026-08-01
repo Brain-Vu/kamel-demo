@@ -14,12 +14,16 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.2.0",
     "@mui/material": "^9.2.0",
+    "leaflet": "^1.9.4",
+    "leaflet-color-markers": "^0.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-leaflet": "^5.0.0",
     "recharts": "^3.10.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",

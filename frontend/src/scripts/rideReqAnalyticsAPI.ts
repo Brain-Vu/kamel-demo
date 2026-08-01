@@ -1,8 +1,16 @@
-import { riderTrafficUrl, timestampsUrl, startLocUrl, endLocUrl } from "./urls";
+import {
+  riderTrafficHourlyUrl,
+  riderTrafficDailyUrl,
+  riderTrafficMonthlyUrl,
+  riderTrafficYearlyUrl,
+  timestampsUrl,
+  startLocUrl,
+  endLocUrl,
+} from "./urls";
 
-export async function getRiderTraffic() {
+async function getRiderTraffic(url: string) {
   try {
-    const response = await fetch(riderTrafficUrl);
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -11,6 +19,18 @@ export async function getRiderTraffic() {
   } catch (error) {
     console.error("GET rider traffic failed", error);
   }
+}
+export async function getRiderTrafficHourly() {
+  return await getRiderTraffic(riderTrafficHourlyUrl);
+}
+export async function getRiderTrafficDaily() {
+  return await getRiderTraffic(riderTrafficDailyUrl);
+}
+export async function getRiderTrafficMonthly() {
+  return await getRiderTraffic(riderTrafficMonthlyUrl);
+}
+export async function getRiderTrafficYearly() {
+  return await getRiderTraffic(riderTrafficYearlyUrl);
 }
 export async function getTimestamps() {
   try {

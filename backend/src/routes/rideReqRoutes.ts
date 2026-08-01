@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { RideReq } from "../models/RideReq";
+import { RideReq } from "../../../shared/types";
 import { rideReqService } from "../dependencies";
 
 const router = Router();
@@ -13,7 +13,6 @@ router.post("/", (req, res) => {
 
 /* GET all ride requests*/
 router.get("/", (req, res) => {
-  console.log("here")
   const rideReqs = rideReqService.getRideReqs();
   res.json(rideReqs);
 });
