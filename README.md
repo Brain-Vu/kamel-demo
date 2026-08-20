@@ -1,6 +1,6 @@
 # Kamel Ride Demo Dashboard
 
-A real-time ride request analytics dashboard built with React, TypeScript, and Node.js.
+A real-time ride request analytics dashboard built with React, TypeScript, Node.js, and Express.
 
 ## Overview
 
